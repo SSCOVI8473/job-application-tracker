@@ -43,6 +43,7 @@ public class ApplicationManager {
     public void displayApplications() {
         for (JobApplication application : applications) {
             System.out.println(application.getSummary());
+            System.out.println();
         }
     }
 }
