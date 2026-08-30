@@ -30,6 +30,7 @@ public class JobApplicationTracker
 
             choice = scnr.nextInt();
             scnr.nextLine();
+            System.out.println();
 
             switch (choice) {
                 case 1:
