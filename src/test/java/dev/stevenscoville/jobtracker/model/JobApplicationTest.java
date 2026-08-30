@@ -58,7 +58,7 @@ public class JobApplicationTest {
 
         assertTrue(summary.contains("Microsoft"));
         assertTrue(summary.contains("Software Developer"));
-        assertTrue(summary.contains("2026-08-23"));
+        assertTrue(summary.contains("August 23, 2026"));
         assertTrue(summary.contains("Interviewing"));
         assertTrue(summary.contains("Second interview scheduled"));
     }
