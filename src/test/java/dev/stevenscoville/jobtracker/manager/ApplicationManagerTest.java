@@ -108,4 +108,28 @@ public class ApplicationManagerTest {
 
         assertNull(result);
     }
+
+    @Test
+    public void displayApplicationsReturnsAllApplicationSummaries() {
+        JobApplication application1 = new JobApplication(
+            "Microsoft", 
+            "Software Developer", 
+            LocalDate.of(2026, 8, 23)
+        );
+
+        JobApplication application2 = new JobApplication(
+            "Google", 
+            "QA Engineer", 
+            LocalDate.of(2026, 8, 24)
+        );
+
+        ApplicationManager manager = new ApplicationManager();
+        manager.addApplication(application1);
+        manager.addApplication(application2);
+
+        String result = manager.displayApplications();
+
+        assertTrue(result.contains(application1.getSummary()));
+        assertTrue(result.contains(application2.getSummary()));
+    }
 }
