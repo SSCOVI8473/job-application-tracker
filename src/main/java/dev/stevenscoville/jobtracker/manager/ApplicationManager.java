@@ -40,10 +40,15 @@ public class ApplicationManager {
         return null; // Return null if not found
     }
 
-    public void displayApplications() {
-        for (JobApplication application : applications) {
-            System.out.println(application.getSummary());
-            System.out.println();
+    public String displayApplications() {
+        StringBuilder output = new StringBuilder();
+
+        for (JobApplication application : applications)
+        {
+            output.append(application.getSummary());
+            output.append("\n\n");
         }
+
+        return output.toString();
     }
 }
