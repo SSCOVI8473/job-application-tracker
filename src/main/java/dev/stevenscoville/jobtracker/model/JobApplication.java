@@ -1,6 +1,7 @@
 package dev.stevenscoville.jobtracker.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class JobApplication {
     private String company;
@@ -8,6 +9,8 @@ public class JobApplication {
     private LocalDate applicationDate;
     private String status;
     private String notes;
+    private static final DateTimeFormatter DATE_FORMATTER =
+        DateTimeFormatter.ofPattern("MMMM d, yyyy");
 
     public JobApplication(String company, String positionTitle, LocalDate applicationDate) {
         this.company = company;
@@ -70,7 +73,7 @@ public class JobApplication {
     public String getSummary() {
         return "Company: " + company + "\n" +
                "Position Title: " + positionTitle + "\n" +
-               "Application Date: " + applicationDate + "\n" +
+               "Application Date: " + applicationDate.format(DATE_FORMATTER) + "\n" +
                "Status: " + status + "\n" +
                "Notes: " + notes;
     }
