@@ -198,6 +198,26 @@ public class JobApplicationTrackerGUI {
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.WEST;
+        
+        salaryLabel.setVisible(false);
+        salaryField.setVisible(false);
+        remoteLabel.setVisible(false);
+        remoteCheckBox.setVisible(false);
+
+        applicationTypeComboBox.addActionListener(e -> {
+            boolean isInternship =
+                applicationTypeComboBox.getSelectedItem().equals("Internship");
+
+            internshipTypeLabel.setVisible(isInternship);
+            internshipTypeComboBox.setVisible(isInternship);
+            semesterLabel.setVisible(isInternship);
+            semesterField.setVisible(isInternship);
+
+            salaryLabel.setVisible(!isInternship);
+            salaryField.setVisible(!isInternship);
+            remoteLabel.setVisible(!isInternship);
+            remoteCheckBox.setVisible(!isInternship);
+        });
 
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
