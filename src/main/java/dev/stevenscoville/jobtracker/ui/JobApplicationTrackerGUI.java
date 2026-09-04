@@ -1,19 +1,26 @@
 package dev.stevenscoville.jobtracker.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.time.LocalDate;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import java.time.LocalDate;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import dev.stevenscoville.jobtracker.model.JobApplication;
 
@@ -44,18 +51,27 @@ public class JobApplicationTrackerGUI {
         JLabel positionLabel;
         JLabel remoteLabel;
         JLabel salaryLabel;
+        JLabel selectedApplicationLabel;
         JLabel semesterLabel;
         JLabel statusLabel;
 
         JList<JobApplication> applicationsList;
 
         JTextArea notesArea;
+        JTextArea selectedApplicationArea;
 
         JTextField companyField;
         JTextField dateField;
         JTextField positionField;
         JTextField salaryField;
         JTextField semesterField;
+
+        Color backgroundColor = new Color(18, 24, 32);
+        Color panelColor = new Color(27, 36, 48);
+        Color fieldColor = new Color(38, 49, 64);
+        Color textColor = new Color(230, 235, 240);
+        Color accentColor = new Color(66, 135, 181);
+        Color successColor = new Color(72, 160, 120);
 
         applicationTypeComboBox =
             new JComboBox<>(new String[] {"Internship", "Full-Time"});
@@ -84,6 +100,11 @@ public class JobApplicationTrackerGUI {
         notesArea.setLineWrap(true);
         notesArea.setWrapStyleWord(true);
 
+        selectedApplicationArea = new JTextArea();
+        selectedApplicationArea.setEditable(false);
+        selectedApplicationArea.setLineWrap(true);
+        selectedApplicationArea.setWrapStyleWord(true);
+
         applicationsList = new JList<>();
 
         addButton = new JButton("Add Application");
@@ -98,7 +119,8 @@ public class JobApplicationTrackerGUI {
         updateStatusButton.setEnabled(false);
 
         applicationTypeLabel = new JLabel("Application Type:");
-        applicationsListLabel = new JLabel("Applications:");
+        applicationsListLabel =
+            new JLabel("Applications", SwingConstants.CENTER);
         companyLabel = new JLabel("Company:");
         dateLabel = new JLabel("Application Date (YYYY-MM-DD):");
         internshipTypeLabel = new JLabel("Internship Type:");
@@ -106,10 +128,104 @@ public class JobApplicationTrackerGUI {
         positionLabel = new JLabel("Position:");
         remoteLabel = new JLabel("Remote:");
         salaryLabel = new JLabel("Salary:");
+        selectedApplicationLabel =
+            new JLabel("Selected Application", SwingConstants.CENTER);
         semesterLabel = new JLabel("Semester:");
         statusLabel = new JLabel("Status:");
 
+        applicationsListLabel.setFont(
+            new Font("SansSerif", Font.BOLD, 18)
+        );
+
+        selectedApplicationLabel.setFont(
+            new Font("SansSerif", Font.BOLD, 16)
+        );
+
+        applicationTypeLabel.setForeground(textColor);
+        applicationsListLabel.setForeground(textColor);
+        companyLabel.setForeground(textColor);
+        dateLabel.setForeground(textColor);
+        internshipTypeLabel.setForeground(textColor);
+        notesLabel.setForeground(textColor);
+        positionLabel.setForeground(textColor);
+        remoteLabel.setForeground(textColor);
+        salaryLabel.setForeground(textColor);
+        selectedApplicationLabel.setForeground(textColor);
+        semesterLabel.setForeground(textColor);
+        statusLabel.setForeground(textColor);
+
+        companyField.setBackground(fieldColor);
+        companyField.setForeground(textColor);
+        companyField.setCaretColor(textColor);
+
+        dateField.setBackground(fieldColor);
+        dateField.setForeground(textColor);
+        dateField.setCaretColor(textColor);
+
+        positionField.setBackground(fieldColor);
+        positionField.setForeground(textColor);
+        positionField.setCaretColor(textColor);
+
+        salaryField.setBackground(fieldColor);
+        salaryField.setForeground(textColor);
+        salaryField.setCaretColor(textColor);
+
+        semesterField.setBackground(fieldColor);
+        semesterField.setForeground(textColor);
+        semesterField.setCaretColor(textColor);
+
+        notesArea.setBackground(fieldColor);
+        notesArea.setForeground(textColor);
+        notesArea.setCaretColor(textColor);
+
+        selectedApplicationArea.setBackground(fieldColor);
+        selectedApplicationArea.setForeground(textColor);
+
+        applicationsList.setBackground(fieldColor);
+        applicationsList.setForeground(textColor);
+
+        remoteCheckBox.setBackground(panelColor);
+
+        addButton.setBackground(accentColor);
+        addButton.setForeground(textColor);
+
+        clearButton.setBackground(accentColor);
+        clearButton.setForeground(textColor);
+
+        searchButton.setBackground(accentColor);
+        searchButton.setForeground(textColor);
+
         JPanel inputPanel = new JPanel(new GridBagLayout());
+        JPanel applicationsPanel = new JPanel(new BorderLayout(5, 5));
+        JPanel selectedPanel = new JPanel(new BorderLayout(5, 5));
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+
+        inputPanel.setBackground(panelColor);
+        applicationsPanel.setBackground(panelColor);
+        selectedPanel.setBackground(panelColor);
+        mainPanel.setBackground(backgroundColor);
+
+        inputPanel.setBorder(
+            BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(accentColor),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+            )
+        );
+
+        applicationsPanel.setBorder(
+            BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(accentColor),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+            )
+        );
+
+        selectedPanel.setBorder(
+            BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(accentColor),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+            )
+        );
+
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -196,9 +312,84 @@ public class JobApplicationTrackerGUI {
         gbc.fill = GridBagConstraints.BOTH;
         inputPanel.add(notesScrollPane, gbc);
 
+        JPanel formButtonPanel = new JPanel();
+        formButtonPanel.setBackground(panelColor);
+        formButtonPanel.add(addButton);
+        formButtonPanel.add(clearButton);
+
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.WEST;
-        
+        gbc.anchor = GridBagConstraints.CENTER;
+        inputPanel.add(formButtonPanel, gbc);
+
+        JScrollPane applicationsScrollPane =
+            new JScrollPane(applicationsList);
+
+        applicationsPanel.add(
+            applicationsListLabel,
+            BorderLayout.NORTH
+        );
+
+        applicationsPanel.add(
+            applicationsScrollPane,
+            BorderLayout.CENTER
+        );
+
+        JScrollPane selectedApplicationScrollPane =
+            new JScrollPane(selectedApplicationArea);
+
+        JPanel selectedButtonPanel = new JPanel(new GridBagLayout());
+        selectedButtonPanel.setBackground(panelColor);
+
+        GridBagConstraints buttonGbc = new GridBagConstraints();
+
+        buttonGbc.gridx = 0;
+        buttonGbc.weightx = 1;
+        buttonGbc.fill = GridBagConstraints.HORIZONTAL;
+        buttonGbc.insets = new Insets(4, 4, 4, 4);
+
+        buttonGbc.gridy = 0;
+        selectedButtonPanel.add(searchButton, buttonGbc);
+
+        buttonGbc.gridy = 1;
+        selectedButtonPanel.add(removeButton, buttonGbc);
+
+        buttonGbc.gridy = 2;
+        selectedButtonPanel.add(updateStatusButton, buttonGbc);
+
+        buttonGbc.gridy = 3;
+        selectedButtonPanel.add(editNotesButton, buttonGbc);
+
+        selectedPanel.add(
+            selectedApplicationLabel,
+            BorderLayout.NORTH
+        );
+
+        selectedPanel.add(
+            selectedApplicationScrollPane,
+            BorderLayout.CENTER
+        );
+
+        selectedPanel.add(
+            selectedButtonPanel,
+            BorderLayout.SOUTH
+        );
+
+        inputPanel.setPreferredSize(new Dimension(340, 500));
+        applicationsPanel.setPreferredSize(new Dimension(320, 500));
+        selectedPanel.setPreferredSize(new Dimension(260, 500));
+
+        mainPanel.setBorder(
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        );
+
+        mainPanel.add(inputPanel, BorderLayout.WEST);
+        mainPanel.add(applicationsPanel, BorderLayout.CENTER);
+        mainPanel.add(selectedPanel, BorderLayout.EAST);
+
         salaryLabel.setVisible(false);
         salaryField.setVisible(false);
         remoteLabel.setVisible(false);
@@ -219,10 +410,10 @@ public class JobApplicationTrackerGUI {
             remoteCheckBox.setVisible(!isInternship);
         });
 
-        frame.setSize(800, 600);
+        frame.setSize(1000, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.add(inputPanel);
+        frame.setContentPane(mainPanel);
         frame.setVisible(true);
     }
 }
