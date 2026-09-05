@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -16,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -23,11 +25,15 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import dev.stevenscoville.jobtracker.model.JobApplication;
+import dev.stevenscoville.jobtracker.manager.ApplicationManager;
+import dev.stevenscoville.jobtracker.model.FullTimeApplication;
+import dev.stevenscoville.jobtracker.model.InternshipApplication;
 
 public class JobApplicationTrackerGUI {
     public static void main(String[] args)
     {
         JFrame frame = new JFrame("Job Application Tracker");
+        ApplicationManager applicationManager = new ApplicationManager();
 
         JButton addButton;
         JButton clearButton;
@@ -408,6 +414,148 @@ public class JobApplicationTrackerGUI {
             salaryField.setVisible(!isInternship);
             remoteLabel.setVisible(!isInternship);
             remoteCheckBox.setVisible(!isInternship);
+        });
+
+        addButton.addActionListener(e -> {
+            String company = companyField.getText().trim();
+            String positionTitle = positionField.getText().trim();
+            String notes = notesArea.getText().trim();
+
+            if (company.isEmpty() || positionTitle.isEmpty())
+            {
+                JOptionPane.showMessageDialog(
+                    frame,
+                    "Company and position are required.",
+                    "Missing Information",
+                    JOptionPane.WARNING_MESSAGE
+                );
+
+                return;
+            }
+
+            LocalDate applicationDate;
+
+            try
+            {
+                applicationDate =
+                    LocalDate.parse(dateField.getText().trim());
+            }
+            catch (DateTimeParseException exception)
+            {
+                JOptionPane.showMessageDialog(
+                    frame,
+                    "Enter the application date as YYYY-MM-DD.",
+                    "Invalid Date",
+                    JOptionPane.ERROR_MESSAGE
+                );
+
+                return;
+            }
+
+            String status =
+                (String) statusComboBox.getSelectedItem();
+
+            if (applicationTypeComboBox
+                .getSelectedItem()
+                .equals("Internship"))
+            {
+                String internshipType =
+                    (String) internshipTypeComboBox.getSelectedItem();
+
+                String semester = semesterField.getText().trim();
+
+                if (semester.isEmpty())
+                {
+                    JOptionPane.showMessageDialog(
+                        frame,
+                        "Semester is required for an internship.",
+                        "Missing Information",
+                        JOptionPane.WARNING_MESSAGE
+                    );
+
+                    return;
+                }
+
+                InternshipApplication application =
+                    new InternshipApplication(
+                        company,
+                        positionTitle,
+                        applicationDate,
+                        status,
+                        notes,
+                        internshipType,
+                        semester
+                    );
+
+                applicationManager.addApplication(application);
+            }
+            else
+            {
+                double salary;
+
+                try
+                {
+                    salary =
+                        Double.parseDouble(salaryField.getText().trim());
+                }
+                catch (NumberFormatException exception)
+                {
+                    JOptionPane.showMessageDialog(
+                        frame,
+                        "Salary must be a valid number.",
+                        "Invalid Salary",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+
+                    return;
+                }
+
+                boolean remote = remoteCheckBox.isSelected();
+
+                FullTimeApplication application =
+                    new FullTimeApplication(
+                        company,
+                        positionTitle,
+                        applicationDate,
+                        status,
+                        notes,
+                        salary,
+                        remote
+                    );
+
+                applicationManager.addApplication(application);
+            }
+
+            JOptionPane.showMessageDialog(
+                frame,
+                "Application added successfully.",
+                "Application Added",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+
+            applicationTypeComboBox.setSelectedIndex(0);
+            companyField.setText("");
+            positionField.setText("");
+            dateField.setText(LocalDate.now().toString());
+            internshipTypeComboBox.setSelectedIndex(0);
+            semesterField.setText("");
+            salaryField.setText("");
+            remoteCheckBox.setSelected(false);
+            statusComboBox.setSelectedIndex(0);
+            notesArea.setText("");
+        });
+
+        clearButton.addActionListener(e -> {
+            applicationTypeComboBox.setSelectedIndex(0);
+            companyField.setText("");
+            positionField.setText("");
+            dateField.setText(LocalDate.now().toString());
+            internshipTypeComboBox.setSelectedIndex(0);
+            semesterField.setText("");
+            salaryField.setText("");
+            remoteCheckBox.setSelected(false);
+            statusComboBox.setSelectedIndex(0);
+            notesArea.setText("");
         });
 
         frame.setSize(1000, 600);
