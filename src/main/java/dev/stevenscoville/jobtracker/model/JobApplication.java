@@ -77,4 +77,10 @@ public class JobApplication {
                "Status: " + status + "\n" +
                "Notes: " + notes;
     }
+
+    @Override
+    public String toString()
+    {
+        return company + " - " + positionTitle + " - " + status;
+    }
 }

@@ -1,5 +1,6 @@
 package dev.stevenscoville.jobtracker.model;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 
 public class FullTimeApplication extends JobApplication {
@@ -39,7 +40,7 @@ public class FullTimeApplication extends JobApplication {
     @Override
     public String getSummary() {
         return super.getSummary() + "\n" +
-               "Salary: " + salary + "\n" +
+               "Salary: " + NumberFormat.getCurrencyInstance().format(salary) + "\n" +
                "Remote: " + (remote ? "Yes" : "No");
     }
 }
