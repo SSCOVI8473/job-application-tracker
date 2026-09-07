@@ -8,8 +8,20 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests the FullTimeApplication class, including initialization of
+ * full-time-specific fields and inclusion of those fields in the
+ * formatted application summary.
+ *
+ * @author Steven Scoville
+ * @version 1.0
+ */
 public class FullTimeApplicationTest {
 
+    /**
+     * Verifies that the constructor correctly initializes the salary
+     * and remote-work fields.
+     */
     @Test
     public void constructorSetsFullTimeFields() {
         FullTimeApplication application = new FullTimeApplication(
@@ -24,6 +36,10 @@ public class FullTimeApplicationTest {
         assertTrue(application.isRemote());
     }
 
+    /**
+     * Verifies that the formatted summary contains the full-time
+     * application salary and remote-work information.
+     */
     @Test
     public void getSummaryIncludesFullTimeInformation() {
         FullTimeApplication application = new FullTimeApplication(

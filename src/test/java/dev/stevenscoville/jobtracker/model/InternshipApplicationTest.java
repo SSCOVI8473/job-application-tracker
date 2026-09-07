@@ -7,7 +7,20 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests the InternshipApplication class, including initialization of
+ * internship-specific fields and inclusion of those fields in the
+ * formatted application summary.
+ *
+ * @author Steven Scoville
+ * @version 1.0
+ */
 public class InternshipApplicationTest {
+
+    /**
+     * Verifies that the constructor correctly initializes the internship
+     * type and semester fields.
+     */
     @Test
     public void constructorSetsInternshipFields() {
         InternshipApplication application = new InternshipApplication(
@@ -22,6 +35,10 @@ public class InternshipApplicationTest {
         assertEquals("Fall 2026", application.getSemester());
     }
 
+    /**
+     * Verifies that the formatted summary contains the internship type
+     * and semester information.
+     */
     @Test
     public void getSummaryIncludesInternshipInformation() {
         InternshipApplication application = new InternshipApplication(
