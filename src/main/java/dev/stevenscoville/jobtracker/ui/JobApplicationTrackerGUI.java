@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -25,19 +26,34 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.DefaultListModel;
 
-import dev.stevenscoville.jobtracker.model.JobApplication;
 import dev.stevenscoville.jobtracker.manager.ApplicationManager;
 import dev.stevenscoville.jobtracker.model.FullTimeApplication;
 import dev.stevenscoville.jobtracker.model.InternshipApplication;
+import dev.stevenscoville.jobtracker.model.JobApplication;
 
+/**
+ * Provides the Swing graphical user interface for the Job Application
+ * Tracker. The interface allows users to add, view, search, update,
+ * and remove internship and full-time job applications.
+ *
+ * @author Steven Scoville
+ * @version 1.0
+ */
 public class JobApplicationTrackerGUI {
+
+    /**
+     * Creates and displays the Job Application Tracker graphical interface
+     * and handles user interaction with the application.
+     *
+     * @param args command-line arguments; not used by this application
+     */
     public static void main(String[] args)
     {
         JFrame frame = new JFrame("Job Application Tracker");
         ApplicationManager applicationManager = new ApplicationManager();
 
+        // Buttons used for form and selected-application actions.
         JButton addButton;
         JButton clearButton;
         JButton editNotesButton;
@@ -75,12 +91,14 @@ public class JobApplicationTrackerGUI {
         JTextField salaryField;
         JTextField semesterField;
 
+        // Colors used throughout the graphical interface.
         Color backgroundColor = new Color(18, 24, 32);
         Color panelColor = new Color(27, 36, 48);
         Color fieldColor = new Color(38, 49, 64);
         Color textColor = new Color(230, 235, 240);
         Color accentColor = new Color(66, 135, 181);
 
+        // Initialize form controls and application data fields.
         applicationTypeComboBox =
             new JComboBox<>(new String[] {"Internship", "Full-Time"});
 
@@ -125,6 +143,8 @@ public class JobApplicationTrackerGUI {
         searchButton = new JButton("Search");
         updateStatusButton = new JButton("Update Status");
 
+        // Selection-specific actions remain disabled until an application
+        // is selected from the application list.
         editNotesButton.setEnabled(false);
         removeButton.setEnabled(false);
         updateStatusButton.setEnabled(false);
@@ -144,6 +164,7 @@ public class JobApplicationTrackerGUI {
         semesterLabel = new JLabel("Semester:");
         statusLabel = new JLabel("Status:");
 
+        // Configure heading fonts and component colors.
         applicationsListLabel.setFont(
             new Font("SansSerif", Font.BOLD, 18)
         );
@@ -206,6 +227,7 @@ public class JobApplicationTrackerGUI {
         searchButton.setBackground(accentColor);
         searchButton.setForeground(textColor);
 
+        // Create the three primary sections of the graphical interface.
         JPanel inputPanel = new JPanel(new GridBagLayout());
         JPanel applicationsPanel = new JPanel(new BorderLayout(5, 5));
         JPanel selectedPanel = new JPanel(new BorderLayout(5, 5));
@@ -237,6 +259,7 @@ public class JobApplicationTrackerGUI {
             )
         );
 
+        // Arrange the application-entry form using GridBagLayout.
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -336,6 +359,7 @@ public class JobApplicationTrackerGUI {
         gbc.anchor = GridBagConstraints.CENTER;
         inputPanel.add(formButtonPanel, gbc);
 
+        // Configure the center panel containing the application list.
         JScrollPane applicationsScrollPane =
             new JScrollPane(applicationsList);
 
@@ -349,6 +373,7 @@ public class JobApplicationTrackerGUI {
             BorderLayout.CENTER
         );
 
+        // Configure the selected-application details and action controls.
         JScrollPane selectedApplicationScrollPane =
             new JScrollPane(selectedApplicationArea);
 
@@ -401,11 +426,14 @@ public class JobApplicationTrackerGUI {
         mainPanel.add(applicationsPanel, BorderLayout.CENTER);
         mainPanel.add(selectedPanel, BorderLayout.EAST);
 
+        // Internship-specific fields are displayed initially while
+        // full-time-specific fields remain hidden.
         salaryLabel.setVisible(false);
         salaryField.setVisible(false);
         remoteLabel.setVisible(false);
         remoteCheckBox.setVisible(false);
 
+        // Change the visible form fields based on the application type.
         applicationTypeComboBox.addActionListener(e -> {
             boolean isInternship =
                 applicationTypeComboBox.getSelectedItem().equals("Internship");
@@ -421,6 +449,7 @@ public class JobApplicationTrackerGUI {
             remoteCheckBox.setVisible(!isInternship);
         });
 
+        // Validate form input and create the selected type of application.
         addButton.addActionListener(e -> {
             String company = companyField.getText().trim();
             String positionTitle = positionField.getText().trim();
@@ -531,6 +560,7 @@ public class JobApplicationTrackerGUI {
                 applicationManager.addApplication(application);
             }
 
+            // Display applications alphabetically by company and position.
             ArrayList<JobApplication> sortedApplications =
                 new ArrayList<>(applicationManager.getApplications());
 
@@ -560,6 +590,7 @@ public class JobApplicationTrackerGUI {
                 JOptionPane.INFORMATION_MESSAGE
             );
 
+            // Reset the form after successfully adding an application.
             applicationTypeComboBox.setSelectedIndex(0);
             companyField.setText("");
             positionField.setText("");
@@ -572,6 +603,7 @@ public class JobApplicationTrackerGUI {
             notesArea.setText("");
         });
 
+        // Restore all application-entry fields to their default values.
         clearButton.addActionListener(e -> {
             applicationTypeComboBox.setSelectedIndex(0);
             companyField.setText("");
@@ -585,6 +617,7 @@ public class JobApplicationTrackerGUI {
             notesArea.setText("");
         });
 
+        // Display details and enable actions when an application is selected.
         applicationsList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting())
             {
@@ -613,6 +646,7 @@ public class JobApplicationTrackerGUI {
             }
         });
 
+        // Search by company alone or by both company and position.
         searchButton.addActionListener(e -> {
             JTextField searchCompanyField = new JTextField();
             JTextField searchPositionField = new JTextField();
@@ -703,6 +737,7 @@ public class JobApplicationTrackerGUI {
             );
         });
 
+        // Update the status of the currently selected application.
         updateStatusButton.addActionListener(e -> {
             JobApplication selectedApplication =
                 applicationsList.getSelectedValue();
@@ -760,6 +795,7 @@ public class JobApplicationTrackerGUI {
             selectedApplicationArea.setCaretPosition(0);
         });
 
+        // Allow the notes for the selected application to be edited.
         editNotesButton.addActionListener(e -> {
             JobApplication selectedApplication =
                 applicationsList.getSelectedValue();
@@ -805,6 +841,7 @@ public class JobApplicationTrackerGUI {
             selectedApplicationArea.setCaretPosition(0);
         });
 
+        // Remove the selected application after user confirmation.
         removeButton.addActionListener(e -> {
             JobApplication selectedApplication =
                 applicationsList.getSelectedValue();
@@ -846,6 +883,7 @@ public class JobApplicationTrackerGUI {
             editNotesButton.setEnabled(false);
         });
 
+        // Configure and display the completed application window.
         frame.setSize(1000, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
