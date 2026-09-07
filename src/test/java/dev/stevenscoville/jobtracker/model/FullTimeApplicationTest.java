@@ -36,7 +36,7 @@ public class FullTimeApplicationTest {
 
         String summary = application.getSummary();
 
-        assertTrue(summary.contains("75000.0"));
+        assertTrue(summary.contains("$75,000.00"));
         assertTrue(summary.contains("No"));
         assertFalse(application.isRemote());
     }

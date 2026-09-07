@@ -613,6 +613,96 @@ public class JobApplicationTrackerGUI {
             }
         });
 
+        searchButton.addActionListener(e -> {
+            JTextField searchCompanyField = new JTextField();
+            JTextField searchPositionField = new JTextField();
+
+            JPanel searchPanel = new JPanel(new GridBagLayout());
+            GridBagConstraints searchGbc = new GridBagConstraints();
+
+            searchGbc.insets = new Insets(5, 5, 5, 5);
+            searchGbc.fill = GridBagConstraints.HORIZONTAL;
+
+            searchGbc.gridx = 0;
+            searchGbc.gridy = 0;
+            searchGbc.weightx = 0;
+            searchPanel.add(new JLabel("Company:"), searchGbc);
+
+            searchGbc.gridx = 1;
+            searchGbc.weightx = 1;
+            searchPanel.add(searchCompanyField, searchGbc);
+
+            searchGbc.gridx = 0;
+            searchGbc.gridy = 1;
+            searchGbc.weightx = 0;
+            searchPanel.add(new JLabel("Position (optional):"), searchGbc);
+
+            searchGbc.gridx = 1;
+            searchGbc.weightx = 1;
+            searchPanel.add(searchPositionField, searchGbc);
+
+            int result = JOptionPane.showConfirmDialog(
+                frame,
+                searchPanel,
+                "Search Applications",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (result != JOptionPane.OK_OPTION)
+            {
+                return;
+            }
+
+            String company = searchCompanyField.getText().trim();
+            String positionTitle = searchPositionField.getText().trim();
+
+            if (company.isEmpty())
+            {
+                JOptionPane.showMessageDialog(
+                    frame,
+                    "Company is required to search.",
+                    "Missing Information",
+                    JOptionPane.WARNING_MESSAGE
+                );
+
+                return;
+            }
+
+            JobApplication foundApplication;
+
+            if (positionTitle.isEmpty())
+            {
+                foundApplication =
+                    applicationManager.findApplication(company);
+            }
+            else
+            {
+                foundApplication =
+                    applicationManager.findApplication(
+                        company,
+                        positionTitle
+                    );
+            }
+
+            if (foundApplication == null)
+            {
+                JOptionPane.showMessageDialog(
+                    frame,
+                    "No matching application was found.",
+                    "Application Not Found",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+
+                return;
+            }
+
+            applicationsList.setSelectedValue(
+                foundApplication,
+                true
+            );
+        });
+
         frame.setSize(1000, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
