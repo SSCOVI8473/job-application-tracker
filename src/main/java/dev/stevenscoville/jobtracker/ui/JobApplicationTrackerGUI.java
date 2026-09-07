@@ -703,6 +703,108 @@ public class JobApplicationTrackerGUI {
             );
         });
 
+        updateStatusButton.addActionListener(e -> {
+            JobApplication selectedApplication =
+                applicationsList.getSelectedValue();
+
+            if (selectedApplication == null)
+            {
+                return;
+            }
+
+            JComboBox<String> newStatusComboBox =
+                new JComboBox<>(new String[] {
+                    "Applied",
+                    "Interview",
+                    "Offer",
+                    "Rejected",
+                    "Withdrawn"
+                });
+
+            newStatusComboBox.setSelectedItem(
+                selectedApplication.getStatus()
+            );
+
+            int result = JOptionPane.showConfirmDialog(
+                frame,
+                newStatusComboBox,
+                "Update Status",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (result != JOptionPane.OK_OPTION)
+            {
+                return;
+            }
+
+            String newStatus =
+                (String) newStatusComboBox.getSelectedItem();
+
+            selectedApplication.setStatus(newStatus);
+
+            int selectedIndex =
+                applicationsList.getSelectedIndex();
+
+            applicationsListModel.set(
+                selectedIndex,
+                selectedApplication
+            );
+
+            applicationsList.setSelectedIndex(selectedIndex);
+
+            selectedApplicationArea.setText(
+                selectedApplication.getSummary()
+            );
+
+            selectedApplicationArea.setCaretPosition(0);
+        });
+
+        editNotesButton.addActionListener(e -> {
+            JobApplication selectedApplication =
+                applicationsList.getSelectedValue();
+
+            if (selectedApplication == null)
+            {
+                return;
+            }
+
+            JTextArea editNotesArea = new JTextArea(
+                selectedApplication.getNotes(),
+                8,
+                30
+            );
+
+            editNotesArea.setLineWrap(true);
+            editNotesArea.setWrapStyleWord(true);
+
+            JScrollPane editNotesScrollPane =
+                new JScrollPane(editNotesArea);
+
+            int result = JOptionPane.showConfirmDialog(
+                frame,
+                editNotesScrollPane,
+                "Edit Notes",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (result != JOptionPane.OK_OPTION)
+            {
+                return;
+            }
+
+            selectedApplication.setNotes(
+                editNotesArea.getText().trim()
+            );
+
+            selectedApplicationArea.setText(
+                selectedApplication.getSummary()
+            );
+
+            selectedApplicationArea.setCaretPosition(0);
+        });
+
         frame.setSize(1000, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
