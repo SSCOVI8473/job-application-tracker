@@ -9,6 +9,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -23,6 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.DefaultListModel;
 
 import dev.stevenscoville.jobtracker.model.JobApplication;
 import dev.stevenscoville.jobtracker.manager.ApplicationManager;
@@ -77,7 +80,6 @@ public class JobApplicationTrackerGUI {
         Color fieldColor = new Color(38, 49, 64);
         Color textColor = new Color(230, 235, 240);
         Color accentColor = new Color(66, 135, 181);
-        Color successColor = new Color(72, 160, 120);
 
         applicationTypeComboBox =
             new JComboBox<>(new String[] {"Internship", "Full-Time"});
@@ -111,7 +113,10 @@ public class JobApplicationTrackerGUI {
         selectedApplicationArea.setLineWrap(true);
         selectedApplicationArea.setWrapStyleWord(true);
 
-        applicationsList = new JList<>();
+        DefaultListModel<JobApplication> applicationsListModel =
+            new DefaultListModel<>();
+
+        applicationsList = new JList<>(applicationsListModel);
 
         addButton = new JButton("Add Application");
         clearButton = new JButton("Clear");
@@ -526,6 +531,28 @@ public class JobApplicationTrackerGUI {
                 applicationManager.addApplication(application);
             }
 
+            ArrayList<JobApplication> sortedApplications =
+                new ArrayList<>(applicationManager.getApplications());
+
+            sortedApplications.sort(
+                Comparator
+                    .comparing(
+                        JobApplication::getCompany,
+                        String.CASE_INSENSITIVE_ORDER
+                    )
+                    .thenComparing(
+                        JobApplication::getPositionTitle,
+                        String.CASE_INSENSITIVE_ORDER
+                    )
+            );
+
+            applicationsListModel.clear();
+
+            for (JobApplication application : sortedApplications)
+            {
+                applicationsListModel.addElement(application);
+            }
+
             JOptionPane.showMessageDialog(
                 frame,
                 "Application added successfully.",
@@ -556,6 +583,34 @@ public class JobApplicationTrackerGUI {
             remoteCheckBox.setSelected(false);
             statusComboBox.setSelectedIndex(0);
             notesArea.setText("");
+        });
+
+        applicationsList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting())
+            {
+                JobApplication selectedApplication =
+                    applicationsList.getSelectedValue();
+
+                boolean hasSelection =
+                    selectedApplication != null;
+
+                removeButton.setEnabled(hasSelection);
+                updateStatusButton.setEnabled(hasSelection);
+                editNotesButton.setEnabled(hasSelection);
+
+                if (hasSelection)
+                {
+                    selectedApplicationArea.setText(
+                        selectedApplication.getSummary()
+                    );
+
+                    selectedApplicationArea.setCaretPosition(0);
+                }
+                else
+                {
+                    selectedApplicationArea.setText("");
+                }
+            }
         });
 
         frame.setSize(1000, 600);
