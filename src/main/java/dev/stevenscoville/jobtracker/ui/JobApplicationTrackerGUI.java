@@ -805,6 +805,47 @@ public class JobApplicationTrackerGUI {
             selectedApplicationArea.setCaretPosition(0);
         });
 
+        removeButton.addActionListener(e -> {
+            JobApplication selectedApplication =
+                applicationsList.getSelectedValue();
+
+            if (selectedApplication == null)
+            {
+                return;
+            }
+
+            int result = JOptionPane.showConfirmDialog(
+                frame,
+                "Remove "
+                    + selectedApplication.getCompany()
+                    + " - "
+                    + selectedApplication.getPositionTitle()
+                    + "?",
+                "Confirm Removal",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+            );
+
+            if (result != JOptionPane.YES_OPTION)
+            {
+                return;
+            }
+
+            applicationManager.removeApplication(
+                selectedApplication
+            );
+
+            applicationsListModel.removeElement(
+                selectedApplication
+            );
+
+            selectedApplicationArea.setText("");
+
+            removeButton.setEnabled(false);
+            updateStatusButton.setEnabled(false);
+            editNotesButton.setEnabled(false);
+        });
+
         frame.setSize(1000, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
